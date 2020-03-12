@@ -2,6 +2,7 @@
 
 import argparse
 import motif as mo
+import draw 
 import re
 
 
@@ -9,8 +10,10 @@ def get_args():
 
     """ get file names for input FASTA and motifs"""
     parser = argparse.ArgumentParser(description=' File name to be used')
-    parser.add_argument('-f', '--fasta', type=str,help='File Name for Fasta containing sequences to search', required=True)
-    parser.add_argument('-m', '--motif', type=str, help='File Name for file containing motifs each on separate lines', required=True)
+    parser.add_argument('-f', '--fasta', type=str,help='File Name for Fasta containing sequences to search', 
+                        required=True)
+    parser.add_argument('-m', '--motif', type=str, help='File Name for file containing motifs each on separate lines', 
+                        required=True)
     return parser.parse_args()
 
 
@@ -31,7 +34,7 @@ def motifs(m):
             line = line.strip()
             motif.append(line)
             line = line.lower()
-            motife.append(''.join(iupac.get(ch, ch) for ch in line))
+            motife.append('(?=('+(''.join(iupac.get(ch, ch) for ch in line))+'))')
     return motif, motife
 
 
@@ -41,22 +44,26 @@ def main():
     with open(f, 'r') as file:
         seq = ""
         hed = ""
-        obs=[]
+        obs = []
         x = 0
         for line in file:
-            line.strip()
-            if re.search("^>",line) is None:
-                seq = line +seq
+            line = line.strip()
+            if re.search("^>", line) is None:
+                seq = seq + line
             else:
                 if len(seq) > 0:
-                    obs.append(mo.motifList(seq,hed,motife))
+                    obs.append(mo.motifList(seq, hed, motife))
                     x += 1
                     hed = line
+                    seq = ""
                 else:
                     hed = line
+                    seq = ""
         obs.append(mo.motifList(seq, hed, motife))
-    print(obs[1].info)
-if __name__=="__main__":
+    draw.draw(obs, motif)
+
+    
+if __name__ == "__main__":
     main()
 
 

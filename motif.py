@@ -18,7 +18,7 @@ class motifList(object):
         self.seqLen = len(self.sequence)
         self.exons = []
         self.chrPos = header.split(" ")[1]
-        p = re.compile("[A-Z]+")
+        p = re.compile("[A,C,G,T]+")
         m = p.finditer(self.sequence)
         for match in m:
             self.exons.append(match.span())
@@ -31,9 +31,9 @@ class motifList(object):
             for match in m:
                 self.motifPos.append(match.start())
                 self.motifTyp.append(x)
-        self.sequence = None
-        self.header = None
-        self.motifs = None
+        del self.sequence
+        del self.header
+        del self.motifs
 
     def info(self):
         return self.motifPos, self.motifTyp, self.seqLen, self.exons, self.chrPos
