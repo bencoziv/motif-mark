@@ -38,9 +38,9 @@ class draw(object):
             for motif in ob.motifPos:
                 ct.move_to(motif, y)
                 ct.set_source_rgba(cmap[(ob.motifTyp[m]-1)][0],cmap[(ob.motifTyp[m]-1)][1],cmap[(ob.motifTyp[m]-1)][2],
-                                   ((cmap[(ob.motifTyp[m]-1)][3])*1))
-                ct.move_to((int(motif)), (y-10))
-                ct.line_to(int(motif), (y+10))
+                                   ((cmap[(ob.motifTyp[m]-1)][3])*.75))
+                ct.rectangle((int(motif)), (y-10), 3, 20)
+                ct.fill()
                 ct.stroke()
                 m += 1
             y += 100

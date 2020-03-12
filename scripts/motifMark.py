@@ -35,6 +35,7 @@ def motifs(m):
             motif.append(line)
             line = line.lower()
             motife.append('(?=('+(''.join(iupac.get(ch, ch) for ch in line))+'))')
+            # creates a regex for variable IUPAC codes and adds a lookahead to find consecutive motifs
     return motif, motife
 
 
@@ -45,22 +46,23 @@ def main():
         seq = ""
         hed = ""
         obs = []
-        x = 0
         for line in file:
             line = line.strip()
             if re.search("^>", line) is None:
+                #Checks if line is a header line or a sequence line
                 seq = seq + line
             else:
                 if len(seq) > 0:
                     obs.append(mo.motifList(seq, hed, motife))
-                    x += 1
                     hed = line
                     seq = ""
                 else:
                     hed = line
                     seq = ""
         obs.append(mo.motifList(seq, hed, motife))
+        #added to append the last sequence to an object
     draw.draw(obs, motif)
+    # Passes set of motif objects to draw class, and unedited motifs to create a picture
 
     
 if __name__ == "__main__":
